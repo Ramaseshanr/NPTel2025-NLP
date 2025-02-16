@@ -31,7 +31,7 @@ class HAL:
         for file_name in os.listdir(self.corpus_folder):
             file_path = os.path.join(self.corpus_folder, file_name)
             with open(file_path, 'r', encoding='utf-8') as file:
-                for line in tqdm(file, desc='Lines', unit=' line'):
+                for line in tqdm(file, desc=f'{file_name}', unit=' line'):
 
                 # for line in file:
                     tokens = nltk.word_tokenize(line.lower())
@@ -67,7 +67,7 @@ class HAL:
             file_path = os.path.join(self.corpus_folder, file_name)
             with open(file_path, 'r', encoding='utf-8') as file:
                 tokens = nltk.word_tokenize(file.read().lower())
-                for i, token in tqdm(enumerate(tokens), desc='Token', unit=' token'):
+                for i, token in tqdm(enumerate(tokens), desc=f'{file_name}/Tokens', unit=' token'):
 
                 # for i, token in enumerate(tokens):
                     # if token not in stop_words:
@@ -121,20 +121,14 @@ if __name__ == '__main__':
     model_file = './Models/WordVectors.hal'
     hal = HAL(corpus_folder, min_count=5, window_size=10, nearest_neighbor=10, farthest_neighbor=1)
 
-    build_or_predict = int(input('1. Build\n2. Find Similar words\n(1/2)'))
-    if build_or_predict == 1:
-        # hal = HAL(corpus_folder, min_count=5, window_size=10, nearest_neighbor=10, farthest_neighbor=1)
-        hal.preprocess_corpus()
-        hal.compute_word_vectors()
-        hal.save_word_vectors(model_file)
-    # else:
-        # Load saved word vectors
-        hal.load_word_vectors(model_file)
-    #     # Distance measure example
-        while (1):
-            word = input('\nInput word:')
-            similar_words = hal.distance_measure(word)
-            print(f"Similar words to '{word}': {similar_words}")
+    hal.preprocess_corpus()
+    hal.compute_word_vectors()
+    hal.save_word_vectors(model_file)
+#     # Distance measure example
+    while (1):
+        word = input('\nInput word:')
+        similar_words = hal.distance_measure(word)
+        print(f"Similar words to '{word}': {similar_words}")
 
 
     #Exercise
